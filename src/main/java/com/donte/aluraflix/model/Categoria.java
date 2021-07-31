@@ -8,12 +8,16 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Categoria {
 	
 	public final static Long CATEGORIA_LIVRE = 1L;

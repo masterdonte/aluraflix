@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +28,9 @@ public class VideoService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Video> listAll() {
-		return repository.findAll();		
+	public List<Video> listAll(Video videoFiltro) {
+		Example<Video> example = Example.of(videoFiltro, ExampleMatcher.matchingAny().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING));
+		return repository.findAll(example);		
 	}
 	
 	@Transactional(readOnly = true)
