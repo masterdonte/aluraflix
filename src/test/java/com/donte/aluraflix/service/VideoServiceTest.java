@@ -7,16 +7,6 @@ import org.junit.jupiter.api.Test;
 class VideoServiceTest {
 
 	@Test
-	void testVideoService() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testListAll() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	void testFetchById() {
 		fail("Not yet implemented");
 	}

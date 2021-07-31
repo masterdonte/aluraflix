@@ -33,7 +33,7 @@ class VideoRepositoryTest {
 	
 	@Test
 	public void deveSalvarUmVideo() {
-		VideoDto dto = ScenaryFactory.criarVideo();
+		VideoDto dto = ScenaryFactory.criarVideoDto();
 		Video video = repository.save( new Video(dto));
 		assertNotNull(video.getId());		
 	}
@@ -76,13 +76,13 @@ class VideoRepositoryTest {
 	
 	//@Test	
 	public void deveFalharAoSalvarUmVideoComCategoriaInexistente() {
-		VideoDto dto = ScenaryFactory.criarVideo();
+		VideoDto dto = ScenaryFactory.criarVideoDto();
 		dto.setCategoriaId(1000L);		
 		assertThrows(DataIntegrityViolationException.class,() -> repository.save(new Video(dto)) );
 	}
 		
 	private Video createVideoAndPersist() {
-		VideoDto dto = ScenaryFactory.criarVideo();
+		VideoDto dto = ScenaryFactory.criarVideoDto();
 		return manager.persist(new Video(dto));
 	}
 

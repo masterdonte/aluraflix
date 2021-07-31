@@ -65,6 +65,7 @@ public class CategoriaService {
 		repository.deleteById(id);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Video> fetchVideosByCategoria(Long id) {
 		return repository.findVideosByCategoria(id);		
 	}
