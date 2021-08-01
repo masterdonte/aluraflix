@@ -58,6 +58,8 @@ public class CategoriaService {
 		if(id.equals(Categoria.CATEGORIA_LIVRE))
 			throw new BusinessException("Não é atualizar/excluir esta categoria");
 		
+		repository.findById(id).orElseThrow(() -> new BusinessException("Categoria inexistente"));
+		
 		List<Video> videos = repository.findVideosByCategoria(id);
 		
 		if(!videos.isEmpty())

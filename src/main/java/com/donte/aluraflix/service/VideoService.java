@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.donte.aluraflix.exception.BusinessException;
+import com.donte.aluraflix.model.Categoria;
 import com.donte.aluraflix.model.Video;
 import com.donte.aluraflix.repository.CategoriaRepository;
 import com.donte.aluraflix.repository.VideoRepository;
@@ -38,7 +38,7 @@ public class VideoService {
 		Optional<Video> optVideo = repository.findById(id);
 		
 		if(!optVideo.isPresent()) {			
-			throw new EmptyResultDataAccessException(1);
+			throw new BusinessException("Video inexistente");
 		}
 		
 		return optVideo.get();
@@ -60,11 +60,12 @@ public class VideoService {
 
 	@Transactional
 	public void delete(Long id) {
+		repository.findById(id).orElseThrow(() -> new BusinessException("Vídeo inexistente"));
 		repository.deleteById(id);
 	}	
 	
-	public void validar(Video video) {
-		Long categoriaId = video.getCategoria().getId() == null ? 1L : video.getCategoria().getId();
+	private void validar(Video video) {
+		Long categoriaId = video.getCategoria() == null ? Categoria.CATEGORIA_LIVRE : video.getCategoria().getId();
 		categoriaRepository.findById(categoriaId).orElseThrow(() -> new BusinessException("Categoria não cadastrada"));		
 	}
 

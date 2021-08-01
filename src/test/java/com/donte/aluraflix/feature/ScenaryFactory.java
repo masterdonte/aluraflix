@@ -1,7 +1,5 @@
 package com.donte.aluraflix.feature;
 
-import java.util.Random;
-
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
 import com.donte.aluraflix.model.Categoria;
@@ -11,11 +9,12 @@ import com.donte.aluraflix.projection.VideoDto;
 public class ScenaryFactory {
 	
 	public static VideoDto criarVideoDto() {
+		long categoriaId = generateLongBetween(2, 25);	
 		VideoDto dto = VideoDto.builder()
 				.titulo("AnyTitle")
 				.descricao("AnyDescription")
 				.url("https://gohorseprocess.com.br/extreme-go-horse-xgh/")
-				.categoriaId(Categoria.CATEGORIA_LIVRE).build();
+				.categoriaId(categoriaId).build();
 		return dto;
 	}
 	
@@ -36,10 +35,22 @@ public class ScenaryFactory {
 	}
 	
 	public static Categoria criarCategoriaComId() {
-		long generatedLong = new Random().nextLong();		
+		long longId = generateLongBetween(100, 1000);		
 		Categoria categ = criarCategoria();
-		categ.setId(generatedLong);		
+		categ.setId(longId);		
 		return categ;
+	}
+
+	public static Video criarVideoComId() {
+		long longId = generateLongBetween(100, 1000);
+		Video video = criarVideo();
+		video.setId(longId);
+		return video;
+	}
+	
+	public static long generateLongBetween(long leftLimit, long rightLimit) {
+		long generatedLong = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
+		return generatedLong;
 	}
 
 }

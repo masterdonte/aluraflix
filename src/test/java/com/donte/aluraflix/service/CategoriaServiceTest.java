@@ -44,7 +44,7 @@ class CategoriaServiceTest {
     }
 		
 	@Test
-	void testSave() {
+	void deveSalvarUmaCategoria() {
 		Mockito.when(repository.save(Mockito.any(Categoria.class))).thenReturn(ScenaryFactory.criarCategoriaComId());	
 		Categoria savedCateg = service.save(new Categoria());	
 		assertNotNull(savedCateg.getId());
@@ -100,12 +100,24 @@ class CategoriaServiceTest {
 	void deveDeletarUmaCategoria() {
 		Categoria categoria = ScenaryFactory.criarCategoriaComId();
 		
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(categoria));
+		
 		List<Video> result = new ArrayList<Video>();
 		Mockito.when(repository.findVideosByCategoria(Mockito.anyLong())).thenReturn(result);
 		
 		service.delete(categoria.getId());
 		
 		Mockito.verify(repository).deleteById(categoria.getId());
+	}
+	
+	@Test
+	void deveFalharDeletarUmaCategoriaInexistente() {
+		Categoria categoria = ScenaryFactory.criarCategoriaComId();
+		
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		
+		assertThrows(BusinessException.class, () -> service.delete(categoria.getId()) );		
+		Mockito.verify(repository, Mockito.times(0)).deleteById(Mockito.anyLong());
 	}
 	
 	@Test
@@ -122,6 +134,8 @@ class CategoriaServiceTest {
 	void deveFalharAoDeletarCategoriaComVideosAssociados() {
 		Categoria categoria = ScenaryFactory.criarCategoria();
 		categoria.setId(2L);
+		
+		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(categoria));
 		
 		List<Video> result = new ArrayList<Video>();
 		result.add(ScenaryFactory.criarVideo());
