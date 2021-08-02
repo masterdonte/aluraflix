@@ -89,10 +89,7 @@ class CategoriaServiceTest {
 		Categoria categoria = ScenaryFactory.criarCategoria();
 		Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
-		EmptyResultDataAccessException exception = assertThrows(EmptyResultDataAccessException.class,
-				() -> service.update(5L, categoria));
-		
-		assertEquals(exception.getExpectedSize(), 1);
+		assertThrows(BusinessException.class, () -> service.update(5L, categoria));
 		Mockito.verify(repository, Mockito.times(0)).save(Mockito.any(Categoria.class));
 	}
 	

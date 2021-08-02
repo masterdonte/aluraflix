@@ -74,7 +74,7 @@ class VideoRepositoryTest {
 		assertNull(notFoundVideo);		
 	}
 	
-	//@Test	
+	@Test	
 	public void deveFalharAoSalvarUmVideoComCategoriaInexistente() {
 		VideoDto dto = ScenaryFactory.criarVideoDto();
 		dto.setCategoriaId(1000L);		

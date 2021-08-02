@@ -48,7 +48,7 @@ public class CategoriaService {
 		if(id.equals(Categoria.CATEGORIA_LIVRE))
 			throw new BusinessException("Não é atualizar/excluir esta categoria");
 		
-		Categoria categoriaSalva = this.repository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+		Categoria categoriaSalva = this.repository.findById(id).orElseThrow(() -> new BusinessException("Categoria Inexistente"));
 		BeanUtils.copyProperties(categoria, categoriaSalva, "id");
 		return repository.save(categoriaSalva);
 	}
