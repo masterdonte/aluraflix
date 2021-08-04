@@ -7,7 +7,7 @@ import org.assertj.core.internal.bytebuddy.utility.RandomString;
 
 import com.donte.aluraflix.model.Categoria;
 import com.donte.aluraflix.model.Video;
-import com.donte.aluraflix.projection.VideoDto;
+import com.donte.aluraflix.model.projection.VideoDto;
 
 public class ScenaryFactory {
 	

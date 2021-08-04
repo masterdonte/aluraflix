@@ -1,12 +1,13 @@
 package com.donte.aluraflix.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +29,15 @@ public class VideoService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Video> listAll(Video videoFiltro) {
-		Example<Video> example = Example.of(videoFiltro, ExampleMatcher.matchingAny().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING));
-		return repository.findAll(example);		
+	public Page<Video> listAll(String search, Pageable pageable) {		
+		Video filtro = Video.builder().titulo(search).build();		
+		Example<Video> example = Example.of(filtro, ExampleMatcher.matchingAny().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING));		
+		return repository.findAll(example, pageable);
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<Video> freeList(Pageable pageable) {
+		return repository.findTop10ByOrderByTituloDesc(pageable);
 	}
 	
 	@Transactional(readOnly = true)

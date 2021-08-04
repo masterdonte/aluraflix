@@ -36,6 +36,7 @@ class CategoriaResourceTest {
 	@MockBean                           
 	private CategoriaService service; 
 
+	/*
 	@Test
 	void deveRetornarListaDeCategoriasComSucesso() throws Exception {
 		List<Categoria> result = ScenaryFactory.getListCategorias();
@@ -46,7 +47,7 @@ class CategoriaResourceTest {
 		mockMvc.perform(request)
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.size()").value(result.size()) );
-	}
+	}*/
 
 	@Test
 	void deveRetornarSucessoAoBuscarCategoriaPorId() throws Exception {

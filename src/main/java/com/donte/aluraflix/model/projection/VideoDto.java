@@ -1,4 +1,4 @@
-package com.donte.aluraflix.projection;
+package com.donte.aluraflix.model.projection;
 
 import java.util.List;
 import java.util.stream.Collectors;

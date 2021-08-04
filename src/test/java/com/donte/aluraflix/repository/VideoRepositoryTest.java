@@ -18,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.donte.aluraflix.feature.ScenaryFactory;
 import com.donte.aluraflix.model.Video;
-import com.donte.aluraflix.projection.VideoDto;
+import com.donte.aluraflix.model.projection.VideoDto;
 
 @DataJpaTest // cria uma transacao em cada metodo de teste
 @ActiveProfiles("test")

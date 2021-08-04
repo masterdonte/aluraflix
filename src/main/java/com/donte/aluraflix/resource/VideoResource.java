@@ -1,10 +1,11 @@
 package com.donte.aluraflix.resource;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.donte.aluraflix.model.Video;
-import com.donte.aluraflix.projection.VideoDto;
+import com.donte.aluraflix.model.projection.VideoDto;
 import com.donte.aluraflix.service.VideoService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,21 @@ import lombok.RequiredArgsConstructor;
 public class VideoResource {
 	
 	private final VideoService service;
-
+	
 	@GetMapping	
-	public ResponseEntity<?> list(@RequestParam(value = "search", required = false) String search) {
-		Video videoFiltro = Video.builder().titulo(search).descricao(search).build();
-		List<VideoDto> result = VideoDto.converter(service.listAll(videoFiltro));
+	public ResponseEntity<?> list(@RequestParam(required = false, defaultValue = "0", name = "page") int page,
+			  					  @RequestParam(required = false, defaultValue = "5", name = "size") int size,
+			  					  @RequestParam(required = false, value = "search") String search) {
+	
+		Page<VideoDto> result = service.listAll(search, PageRequest.of(page, size)).map(Video::toDto);		
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/free")
+	public ResponseEntity<?> free(@RequestParam(required = false, defaultValue = "0", name = "page") int page,
+			  					  @RequestParam(required = false, defaultValue = "5", name = "size") int size) {
+	
+		Page<VideoDto> result = service.freeList(PageRequest.of(page, size)).map(Video::toDto);		
 		return ResponseEntity.ok(result);
 	}
 	

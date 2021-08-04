@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,13 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.donte.aluraflix.model.Categoria;
 import com.donte.aluraflix.model.Video;
-import com.donte.aluraflix.projection.VideoDto;
+import com.donte.aluraflix.model.projection.VideoDto;
 import com.donte.aluraflix.service.CategoriaService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,8 +37,10 @@ public class CategoriaResource {
 	private final CategoriaService service;
 
 	@GetMapping	
-	public ResponseEntity<?> list() {		
-		List<Categoria> result = service.listAll();		
+	public ResponseEntity<?> list(@RequestParam(required = false, defaultValue = "0", name = "page") int page,
+	        					  @RequestParam(required = false, defaultValue = "5", name = "size") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<Categoria> result = service.listAll(pageable);		
 		return ResponseEntity.ok(result);
 	}
 	

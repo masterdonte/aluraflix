@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.donte.aluraflix.projection.VideoDto;
+import com.donte.aluraflix.model.projection.VideoDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,4 +39,15 @@ public class Video {
 		this.url = dto.getUrl();
 		this.categoria = new Categoria(dto.getCategoriaId());
 	}
+	
+	public VideoDto toDto(){
+		return new VideoDto(this);
+	}
+	
+	 
+    /*private LocalDateTime created;
+    private LocalDateTime updated;
+    @PreUpdate public void preUpdate() { updated = LocalDateTime.now(); }
+    @PrePersist public void prePersist() { final LocalDateTime now = LocalDateTime.now(); created = updated = now;}
+	*/
 }
