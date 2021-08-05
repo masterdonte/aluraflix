@@ -1,21 +1,23 @@
 package com.donte.aluraflix.resource;
 
-//import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.donte.aluraflix.exception.BusinessException;
 import com.donte.aluraflix.feature.ScenaryFactory;
@@ -23,6 +25,7 @@ import com.donte.aluraflix.model.Video;
 import com.donte.aluraflix.model.projection.VideoDto;
 import com.donte.aluraflix.service.VideoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 @WebMvcTest(controllers = VideoResource.class)
 @ActiveProfiles("test")
@@ -30,26 +33,36 @@ class VideoResourceTest {
 
 	static final String API = "/videos";
 	static final MediaType JSON = MediaType.APPLICATION_JSON;
-
-	@Autowired                           
-	private MockMvc mockMvc;  
+	
+	@Autowired
+    private MockMvc mockMvc;
 
 	@MockBean                           
-	private VideoService videoService; 
-
-/*
+	private VideoService videoService;		
+	
 	@Test
 	void deveRetornarListaDeVideosComSucesso() throws Exception {
-		List<Video> result = ScenaryFactory.getListVideos();
-		Mockito.when( videoService.listAll( Mockito.any(Video.class) ) ).thenReturn(result);
+		Page<Video> result = ScenaryFactory.listConvertToPage1(ScenaryFactory.getListVideos(), PageRequest.of(0, 2));
+		
+		Mockito.when( videoService.listAll(Mockito.anyString(), Mockito.any(Pageable.class)) ).thenReturn(result);
 
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).accept(JSON).contentType(JSON);
-
-		mockMvc.perform(request)
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.size()").value(result.size()) );
-	}*/
-
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).param("search", "exemplo").accept(JSON);
+		
+		MvcResult mcvResult = mockMvc.perform(request)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.size").value(result.getContent().size())) // quantidade de itens no
+			.andExpect(jsonPath("$.totalElements").value(result.getTotalElements()))
+			.andDo(MockMvcResultHandlers.print())
+			.andDo(mvcResult -> {
+	            String json = mvcResult.getResponse().getContentAsString();
+	            System.out.println(json);	          
+	        })
+			.andReturn();
+				
+		Integer total = JsonPath.read(mcvResult.getResponse().getContentAsString(), "$.totalElements");
+		System.out.println(total);		
+	}
+		
 	@Test
 	void deveRetornarSucessoAoBuscarVideoPorId() throws Exception {
 		Video modelo = ScenaryFactory.criarVideoComId();
@@ -69,9 +82,7 @@ class VideoResourceTest {
 	@Test
 	void deveRetornarBadRequestAoBuscarVideoPorId() throws Exception {
 		final Long videoId = ScenaryFactory.generateLongBetween(100, 1000);
-
 		Mockito.when( videoService.fetchById( Mockito.anyLong() ) ).thenThrow(BusinessException.class);
-
 		mockMvc.perform(MockMvcRequestBuilders.get(API.concat("/{id}"), videoId)).andExpect(status().isBadRequest());
 	}
 
@@ -164,7 +175,6 @@ class VideoResourceTest {
 		mockMvc.perform(request).andExpect( status().isBadRequest() )
 		.andExpect(jsonPath("errorMsg").value("Vídeo não encontrado"));
 	}
-
 
 	@Test
 	void deveRetornarBadRequestAoSalvarVideoComCategoriaInexistente() throws Exception {

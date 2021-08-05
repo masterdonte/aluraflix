@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import com.donte.aluraflix.model.Categoria;
 import com.donte.aluraflix.model.Video;
@@ -61,6 +64,7 @@ public class ScenaryFactory {
 		videos.add(criarVideoComId());
 		videos.add(criarVideoComId());
 		videos.add(criarVideoComId());
+		videos.add(criarVideoComId());
 		return videos;
 	}
 
@@ -70,7 +74,14 @@ public class ScenaryFactory {
 		categorias.add(criarCategoriaComId());
 		categorias.add(criarCategoriaComId());
 		categorias.add(criarCategoriaComId());
+		categorias.add(criarCategoriaComId());
 		return categorias;
 	}
+
+	public static <T> Page<T> listConvertToPage1(List<T> list, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > list.size() ? list.size() : (start + pageable.getPageSize());
+        return new PageImpl<T>(list.subList(start, end), pageable, list.size());
+    }
 
 }

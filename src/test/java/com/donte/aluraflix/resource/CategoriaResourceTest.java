@@ -10,11 +10,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.donte.aluraflix.exception.BusinessException;
 import com.donte.aluraflix.feature.ScenaryFactory;
@@ -36,19 +40,24 @@ class CategoriaResourceTest {
 	@MockBean                           
 	private CategoriaService service; 
 
-	/*
 	@Test
 	void deveRetornarListaDeCategoriasComSucesso() throws Exception {
-		List<Categoria> result = ScenaryFactory.getListCategorias();
-		Mockito.when( service.listAll() ).thenReturn(result);
-
-		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).accept(JSON).contentType(JSON);
+		Page<Categoria> result = ScenaryFactory.listConvertToPage1(ScenaryFactory.getListCategorias(), PageRequest.of(0, 2));
+		Mockito.when( service.listAll(Mockito.any(Pageable.class)) ).thenReturn(result);
+		
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).accept(JSON);
 
 		mockMvc.perform(request)
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.size()").value(result.size()) );
-	}*/
-
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.content[0].id").exists() )
+			.andExpect(jsonPath("$.content.length()").value(2) )
+			.andDo(MockMvcResultHandlers.print())
+			.andDo(mvcResult -> {
+	            String json = mvcResult.getResponse().getContentAsString();
+	            System.out.println(json);	           
+	        });
+	}
+	
 	@Test
 	void deveRetornarSucessoAoBuscarCategoriaPorId() throws Exception {
 		Categoria modelo = ScenaryFactory.criarCategoriaComId();

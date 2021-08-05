@@ -21,9 +21,7 @@ CREATE TABLE usuarioperfil (
 INSERT INTO perfil (nome) values ('ADMIN');
 INSERT INTO perfil (nome) values ('USER');
 
-/*
-INSERT INTO usuario (codigo, nome, email, senha) values ('Administrador', 'donte.master@gmail.com', '$2a$10$X607ZPhQ4EgGNaYKt3n4SONjIv9zc.VMWdEuhCuba7oLAL5IvcL5.');
+INSERT INTO usuario (nome, email, senha) values ('Jonathas', 'teste@gmail.com', '$2a$10$2dtuiadBc.glJ/ZriG1vyeiwQfaQnP0KSt7TpWaywBgbuEIGIhPnC');
 
-INSERT INTO permissao (codigo, descricao) values (1, 'ROLE_CADASTRAR_CATEGORIA');
-INSERT INTO permissao (codigo, descricao) values (2, 'ROLE_PESQUISAR_CATEGORIA');
-*/
+INSERT INTO usuarioperfil (usuarioid, perfilid) values (1, 1);
+INSERT INTO usuarioperfil (usuarioid, perfilid) values (1, 2);
