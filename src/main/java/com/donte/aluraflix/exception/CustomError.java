@@ -1,6 +1,8 @@
 package com.donte.aluraflix.exception;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,26 +10,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomError {
 	
-	private String errorMsg;
+	private List<String> errors;
 	
 	private int status;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date timestamp;
 	
-	public CustomError(String errorMsg, int status) {
+	public CustomError(List<String> errors, int status) {
 		super();
-		this.errorMsg = errorMsg;
+		this.errors = errors;
+		this.status = status;
+		this.timestamp = new Date();
+	}
+	
+	public CustomError(String error, int status) {
+		super();
+		this.errors = Arrays.asList(error);
 		this.status = status;
 		this.timestamp = new Date();
 	}
 
-	public String getErrorMsg() {
-		return errorMsg;
+	public List<String> getErrors() {
+		return errors;
 	}
 
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
 	}
 
 	public int getStatus() {

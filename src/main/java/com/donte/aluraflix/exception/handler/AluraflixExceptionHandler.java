@@ -1,14 +1,13 @@
 package com.donte.aluraflix.exception.handler;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,12 +23,8 @@ public class AluraflixExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-		Map<String, String> errors = new HashMap<>();
-		ex.getBindingResult().getAllErrors().forEach((error) -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = error.getDefaultMessage();
-			errors.put(fieldName, errorMessage);
-		});
+		List<String> erros = ex.getBindingResult().getAllErrors().stream().map(error -> error.getDefaultMessage()).collect(Collectors.toList());
+		CustomError errors = new CustomError(erros, HttpStatus.BAD_REQUEST.value());
 		return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);		
 	}
 
@@ -56,6 +51,7 @@ public class AluraflixExceptionHandler extends ResponseEntityExceptionHandler {
 		CustomError error = new CustomError("Entity not found", HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
+	
 /*
 	@ExceptionHandler({ DataIntegrityViolationException.class })
 	public ResponseEntity<Object> handleConstraintViolation(Exception ex, HttpHeaders headers, WebRequest request) {
@@ -70,19 +66,17 @@ public class AluraflixExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		return handleExceptionInternal(ex, ex.getLocalizedMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
-	*/
-
-	/*
-	 @ExceptionHandler(value = EntityNotFoundException.class)
-	public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
-		CustomError error = new CustomError("Entity not found", HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);		
 	}
-
-	@ExceptionHandler(value = BadCredentialsException.class)
-	public ResponseEntity<CustomError> handleBadCredentialsException(BadCredentialsException e) {
-		CustomError error = new CustomError(e.getMessage(), HttpStatus.BAD_REQUEST.value());
-		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-	} */
-
+	
+	*/
 }

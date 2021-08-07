@@ -152,7 +152,7 @@ class VideoResourceTest {
 				.content(json);
 
 		mockMvc.perform(request).andExpect( status().isBadRequest() )
-		.andExpect(jsonPath("errorMsg").value("Categoria não cadastrada"));
+		.andExpect(jsonPath("errors[0]").value("Categoria não cadastrada"));
 	}
 
 	@Test
@@ -173,7 +173,7 @@ class VideoResourceTest {
 				.content(json);
 
 		mockMvc.perform(request).andExpect( status().isBadRequest() )
-		.andExpect(jsonPath("errorMsg").value("Vídeo não encontrado"));
+		.andExpect(jsonPath("errors[0]").value("Vídeo não encontrado"));
 	}
 
 	@Test
@@ -191,7 +191,7 @@ class VideoResourceTest {
 				.content(json);
 
 		mockMvc.perform(request).andExpect( status().isBadRequest() )
-		.andExpect(jsonPath("errorMsg").value("Categoria não cadastrada"));
+		.andExpect(jsonPath("errors[0]").value("Categoria não cadastrada"));
 	}
 
 	@Test
@@ -209,7 +209,7 @@ class VideoResourceTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.delete(API.concat("/{id}"), videoId))
 		.andExpect(status().isBadRequest())
-		.andExpect(jsonPath("errorMsg").value("Vídeo inexistente"));;
+		.andExpect(jsonPath("errors[0]").value("Vídeo inexistente"));;
 	}
 
 }

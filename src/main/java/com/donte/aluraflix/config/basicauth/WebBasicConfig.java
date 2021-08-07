@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.donte.aluraflix.config.SimpleAccessDeniedHandler;
+import com.donte.aluraflix.config.SimpleAuthEntryPoint;
+
 @Profile("basic-auth")
 @Configuration
 public class WebBasicConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
@@ -43,6 +46,10 @@ public class WebBasicConfig extends WebSecurityConfigurerAdapter implements WebM
 		.httpBasic()
 		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.exceptionHandling()
+			.accessDeniedHandler(new SimpleAccessDeniedHandler())
+			.authenticationEntryPoint(new SimpleAuthEntryPoint())
 		.and()
 		.csrf().disable();
 

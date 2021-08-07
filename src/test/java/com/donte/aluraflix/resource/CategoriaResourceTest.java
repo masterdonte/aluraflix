@@ -139,7 +139,7 @@ class CategoriaResourceTest {
 				.content(json);
 
 		mockMvc.perform(request).andExpect( status().isBadRequest() )
-		.andExpect(jsonPath("errorMsg").exists());
+		.andExpect(jsonPath("errors[0]").value("Erro na regra de negocio"));
 	}
 	
 	@Test
@@ -157,7 +157,7 @@ class CategoriaResourceTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.delete(API.concat("/{id}"), categoriaId))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("errorMsg").exists());
+			.andExpect(jsonPath("errors[0]").value("Erro na regra de negocio"));
 	}
 	
 	@Test

@@ -50,13 +50,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 		    <groupId>org.springframework.security</groupId> -->
-<!-- 		    <artifactId>spring-security-test</artifactId> -->
-<!-- 		    <scope>test</scope> -->
-<!-- 		</dependency> -->
-	
+
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
@@ -79,7 +73,13 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-	
+		
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
