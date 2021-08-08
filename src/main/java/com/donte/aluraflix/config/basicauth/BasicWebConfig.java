@@ -19,7 +19,7 @@ import com.donte.aluraflix.config.SimpleAuthEntryPoint;
 
 @Profile("basic-auth")
 @Configuration
-public class WebBasicConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
+public class BasicWebConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer{
 
 	@Autowired
 	private UserDetailsService userService;

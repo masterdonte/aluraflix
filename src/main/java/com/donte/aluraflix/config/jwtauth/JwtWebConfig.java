@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,7 +23,7 @@ import com.donte.aluraflix.config.SimpleAuthEntryPoint;
 @Profile("jwt-auth")
 @EnableWebSecurity
 @Configuration
-public class WebJwtConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class JwtWebConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 	
 	@Autowired
 	private UserDetailsService jwtUserDetailsService;
@@ -51,7 +52,7 @@ public class WebJwtConfig extends WebSecurityConfigurerAdapter implements WebMvc
 		httpSecurity
 		.cors().and()
 		.csrf().disable()
-		.authorizeRequests().antMatchers("/token","/videos/free", "/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html").permitAll()
+		.authorizeRequests().antMatchers("/token","/videos/free").permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().exceptionHandling()
@@ -63,6 +64,13 @@ public class WebJwtConfig extends WebSecurityConfigurerAdapter implements WebMvc
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://localhost:8000");
+    }
+    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+    	// Para ignorando arquivos estáticos
+        web.ignoring()
+            .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
     }
 
 }
