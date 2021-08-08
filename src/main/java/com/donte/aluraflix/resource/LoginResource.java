@@ -22,14 +22,10 @@ public class LoginResource {
 	private  LoginService service;
 
 	@PostMapping("/token")
-	public ResponseEntity<?> getToken(@RequestBody @Valid LoginDto login){
+	public ResponseEntity<?> login(@RequestBody @Valid LoginDto login){
 		UsernamePasswordAuthenticationToken userPassAuthToken = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getSenha());
 		final String token = service.createAuthenticationToken(userPassAuthToken);
 		return ResponseEntity.ok(new TokenDto(token));
 	}
 
-	@PostMapping(("/logout"))
-	public String teste() throws Exception {		
-		return "Jonathas";
-	}
 }
