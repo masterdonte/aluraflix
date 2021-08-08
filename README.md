@@ -14,5 +14,5 @@ O arquivo docker-compose.yml tem os recursos necessários para utilização do b
     - “Username” : type   “root”
     - “Password” : type   "root”
     - “Database” : type   “aluraflix”
-## **DOCUMENTAÇÂO**
+## **DOCUMENTAÇÃO**
 Para acessar a documentação da API clique [aqui](http://ec2-18-231-99-147.sa-east-1.compute.amazonaws.com:8080/swagger-ui.html)
