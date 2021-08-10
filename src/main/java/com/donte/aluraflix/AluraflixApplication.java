@@ -14,18 +14,4 @@ public class AluraflixApplication {
 		SpringApplication.run(AluraflixApplication.class, args);
 	}
 	
-	/*
-	@Bean CommandLineRunner runner(VideoService service){
-		return args -> {
-			/*
-			UsuarioDto dto = UsuarioDto.builder()
-					.nome("Novo Usuario")
-					.email("email@gmail.com")
-					.senha("email").build();
-			usuarioService.save(dto.toUsuario());			
-			System.out.println("CommandLineRunner running in save user...");
-		};
-	}
-	*/
-
 }

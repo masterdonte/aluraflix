@@ -52,7 +52,7 @@ public class JwtWebConfig extends WebSecurityConfigurerAdapter implements WebMvc
 		httpSecurity
 		.cors().and()
 		.csrf().disable()
-		.authorizeRequests().antMatchers("/token","/videos/free").permitAll()
+		.authorizeRequests().antMatchers("/token","/email","/videos/free").permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().exceptionHandling()
